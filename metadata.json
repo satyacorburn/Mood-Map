@@ -1,0 +1,6 @@
+{
+  "name": "MoodMap AI",
+  "description": "MoodMap AI recommend nearby places based on how you feel using geolocation and Gemini AI.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
