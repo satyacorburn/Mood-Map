@@ -657,6 +657,190 @@ function generateLocalFallbacks(
         timeRequired: "1.5 hours",
         explanation: `Mold custom miniature clay monsters and items under bright ultraviolet blacklights. Extremely engaging, tactile, and highly memorable.`
       }
+    ],
+    stressed: [
+      {
+        name: `${citySegment} Sensory Decompression Oasis`,
+        category: "Float Tank & Relaxation Spa",
+        address: `120 Quietude Road, ${areaName}`,
+        priceLevel: "$$$",
+        isOutdoor: false,
+        timeRequired: "1.5 hours",
+        explanation: `Float effortlessly in warm Epsom saltwater flotation cabins. Total silence and darkness allow your central nervous system to completely reset.`
+      },
+      {
+        name: "The Silent Canopy Greenhouse",
+        category: "Botanical Plant Sanctuary",
+        address: `455 Herbaceous Lane, ${areaName}`,
+        priceLevel: "Free",
+        isOutdoor: false,
+        timeRequired: "1 hour",
+        explanation: `A quiet botanical space rich in oxygenating tropical palms and blooming jasmine. Stroll slowly and take deep, comforting breaths.`
+      },
+      {
+        name: "Solitude Acoustic Sound Bath",
+        category: "Calming Meditation Studio",
+        address: `88 Resonance Circle, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: false,
+        timeRequired: "1 hour",
+        explanation: `Recline on plush yoga mats under the soothing, restorative vibrations of Tibetan singing bowls and crystal gongs to quieten your thoughts.`
+      },
+      {
+        name: "The Steeping Stone Tea House",
+        category: "Serene Traditional Tea Room",
+        address: `33 Chamomile Street, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: false,
+        timeRequired: "1 hour",
+        explanation: `Sip rare organic lavender, chamomile, or clean white teas from heated clay cups. Featuring private wooden screens and absolute serenity.`
+      },
+      {
+        name: `${citySegment} Whispering Willows Lakeside Walk`,
+        category: "Gentle Nature Reserve",
+        address: `9 Lakeshore Trail, ${areaName}`,
+        priceLevel: "Free",
+        isOutdoor: true,
+        timeRequired: "45 mins",
+        explanation: `A flat, wind-sheltered unpaved loop under weeping willow trees. Watch ripples on the calm waters and feel deeply grounded.`
+      },
+      {
+        name: "The Eucalyptus Steam Lodge",
+        category: "Therapeutic Inhalation Spa",
+        address: `240 Vapor Ridge, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: false,
+        timeRequired: "1-2 hours",
+        explanation: `Inhale warm, therapeutic eucalyptus mist designed to expand respiratory lines and completely melt body-stored stresses.`
+      },
+      {
+        name: `${citySegment} Therapeutic Cedar Hot Tub & Spa`,
+        category: "Traditional Hot Rock Sauna & Tub",
+        address: `480 Thermic Road, ${areaName}`,
+        priceLevel: "$$$",
+        isOutdoor: false,
+        timeRequired: "2 hours",
+        explanation: `Soothe sore muscles in a dry, aromatic cedar-wood sauna heated by soft vulcan stones, followed by a blissful, meditative soaking experience in hot cedar tubs.`
+      },
+      {
+        name: "Zen Deep-Tissue Massage & Reflexology Spa",
+        category: "Premium Massage & Reflexology Center",
+        address: `105 Kneading Avenue, ${areaName}`,
+        priceLevel: "$$$",
+        isOutdoor: false,
+        timeRequired: "1.5 hours",
+        explanation: `Expert thermal therapy utilizing warm basalt stones and organic lavender-infused massage oils to completely dissolve deep-seated physical stress and tension.`
+      },
+      {
+        name: `${citySegment} Reflection Point Overlook`,
+        category: "Breezy Panoramic Vista",
+        address: `Mile Marker 3, Horizon Highway, ${areaName}`,
+        priceLevel: "Free",
+        isOutdoor: true,
+        timeRequired: "30 mins",
+        explanation: `A spacious high overlook high above city murmurs. Stand in the cool breeze, look out at the infinite blue horizon, and put life into perspective.`
+      },
+      {
+        name: "Harmonic Solitude Vinyl Den",
+        category: "Retro Passive Listening Room",
+        address: `14 Groove Lane, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: false,
+        timeRequired: "1.5 hours",
+        explanation: `Slip on professional noise-canceling headphones, sink into a warm plush beanbag, and listen to low-frequency analog ambient music.`
+      }
+    ],
+    artistic: [
+      {
+        name: `${citySegment} Incline Indie Craft Gallery`,
+        category: "Contemporary Art space",
+        address: `312 Canvas Boulevard, ${areaName}`,
+        priceLevel: "Free",
+        isOutdoor: false,
+        timeRequired: "1.5 hours",
+        explanation: `A vibrant independent venue showcasing avant-garde canvas paintings, abstract statues, and limited-run prints from local breakout artists.`
+      },
+      {
+        name: "The Velvet Quill Bookmark Corner",
+        category: "Independent Bookstore & Attic",
+        address: `88 Paperback Alley, ${areaName}`,
+        priceLevel: "$",
+        isOutdoor: false,
+        timeRequired: "1.5 hours",
+        explanation: `An absolute architectural wonder smelling of rich old paper, featuring cozy reading lofts, vintage comics, and rare first-edition typography.`
+      },
+      {
+        name: "Modern Mosaic Ceramic Depot",
+        category: "Local Craft & Pottery Studio",
+        address: `505 Clayworks Lane, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: false,
+        timeRequired: "2 hours",
+        explanation: `Roll up your sleeves and spin your own raw earthen bowls or mugs, guided by extremely friendly master sculptors.`
+      },
+      {
+        name: "Aether Street Mural Walkway",
+        category: "Public Art Mural Walk",
+        address: `Historic Alleyway district, ${areaName}`,
+        priceLevel: "Free",
+        isOutdoor: true,
+        timeRequired: "1 hour",
+        explanation: `A gorgeous half-mile outdoor corridor boasting gigantic, high-contrast spray-paint masterpieces, community storytelling grids, and vivid portraits.`
+      },
+      {
+        name: "The Sculptor's Garden Café",
+        category: "Art Cafe & Botanical Courtyard",
+        address: `22 chisel Avenue, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: true,
+        timeRequired: "1 hour",
+        explanation: `Sip rich, perfectly poured coffee under the towering shade of maple trees, surrounded by rotating stone workpieces and soothing fountains.`
+      },
+      {
+        name: "Symphonic Neon Glassblowing Studio",
+        category: "Creative Glass Hot Shop",
+        address: `740 Glow Street, ${areaName}`,
+        priceLevel: "$$$",
+        isOutdoor: false,
+        timeRequired: "2 hours",
+        explanation: `Instructors guide you in manipulating molten glass at extreme temperatures, transforming glowing cylinders into delicate color ornaments.`
+      },
+      {
+        name: "Chamber of Retro Screenprinting",
+        category: "DIY Silk-screen Shop",
+        address: `19 Inkwell Ridge, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: false,
+        timeRequired: "1.5 hours",
+        explanation: `Assemble custom silk-screen frames and squeegee colorful ink layers onto premium vintage tote bags or hand-washed cotton tees.`
+      },
+      {
+        name: "Analog Film & Darkroom Club",
+        category: "Photography Studio & Gallery",
+        address: `90 Silver Halide Avenue, ${areaName}`,
+        priceLevel: "$$",
+        isOutdoor: false,
+        timeRequired: "2 hours",
+        explanation: `Step into an authentic red-lit chemical processing room to dye, wash, and hang black-and-white 35mm film negatives.`
+      },
+      {
+        name: `Avant-Garde Architectural Arch`,
+        category: "Public Design Exhibit",
+        address: `Plaza Promenade, ${areaName}`,
+        priceLevel: "Free",
+        isOutdoor: true,
+        timeRequired: "30 mins",
+        explanation: `An award-winning geodesic wooden pavilion combining mathematical fractal lines with natural creeping vines. Perfect for photography.`
+      },
+      {
+        name: "Zen Matcha & Origami Lounge",
+        category: "Methodical Folding Den",
+        address: `105 Paperwork Way, ${areaName}`,
+        priceLevel: "$",
+        isOutdoor: false,
+        timeRequired: "1 hour",
+        explanation: `Engage in slow, mindful origami folding paper crafts accompanied by premium stone-ground warm matcha. Quietly refocuses busy thoughts.`
+      }
     ]
   };
 
@@ -754,7 +938,7 @@ app.post("/api/recommend", async (req, res) => {
       areaName = "San Francisco, CA"; // Ultimate fallback
     }
 
-    const systemPrompt = `You are MoodMap AI, a hyper-focused and delightful local place recommender.
+    const systemPrompt = `You are MoodMap AI, a hyper-focused and delightful local place recommender. If the user's selected mood is "stressed", you MUST prioritize physical decompression centers, therapeutic spas, thermal bathhouses, cedar saunas, massage therapy spots, floatation tank centers, relaxing sound healing baths, and restorative botanical greenhouses to provide ultimate sensory relief and relaxation.
 Given a user's location (city, neighborhood or region), their current mood, and optional preferences (budget, distance, indoor/outdoor state, and time available), you recommend at least 10 actual, real nearby places (e.g. stores, parks, cafes, libraries, scenic spots, secret gardens, restaurants, or active venues) that perfectly cater to their mindset.
 
 ${userLocalTime ? `CRITICAL TIME CONSTRAINT: The user's current local phone/device time is ${userLocalTime}. Do NOT recommend any places that are currently closed at this time of day or day of the week! 
@@ -763,24 +947,22 @@ ${userLocalTime ? `CRITICAL TIME CONSTRAINT: The user's current local phone/devi
 - Similarly, if it is morning, do not recommend bars, nightclubs, or late evening lounges unless they are open.` : ""}
 
 For each place, provide:
-1. "name": The exact name of the place.
+1. "name": The exact, real-world name of the place.
 2. "category": A specific brief category (e.g. "Third Wave Cafe", "Scenic Overlook", "Cozy Bookstore", "Art Museum").
-3. "address": The real or highly accurate street address.
+3. "address": The real or highly accurate street address (include exact street number, street name, city, state, and zip code, verified by search grounding on the map).
 4. "priceLevel": One of: "Free", "$", "$$", "$$$".
 5. "distance": Estimated distance in miles or feet from the center of ${areaName}, written as a reader-friendly string (e.g., "0.4 miles away" or "walking distance").
 6. "timeRequired": Recommended duration, matching user preferences (e.g. "1-2 hours", "30 mins", "Half day").
 7. "explanation": A highly tailored, delightful explanation explaining exactly why this specific place suits their selected mood (${mood}) and other parameters. Keep it under 250 characters. Write with a warm, encouraging, local-guide vibe.
-8. "mapQuery": A clean search query string for Google Maps search, such as "Cafe name address city state".
+8. "mapQuery": A clean, robust search query string for Google Maps search, such as "[Place Name], [Street Address], [City], [State]". This must be as specific as possible to guarantee Google Maps immediately points to the correct, exact real location.
 9. "latitude": Estimated latitude of the place.
 10. "longitude": Estimated longitude of the place.
 
-DO NOT return fake places. Every place must be an actual landmark or business. Make sure you filter strictly based on:
-- mood: ${mood}
-- location preference: ${locationPref || 'Any'} (Indoor/Outdoor focus)
-- budget limit: ${budget || 'Any'} (if Free, prioritize free parks, libraries, vistas, or cheap snacks; if $, keep it affordable)
-- time: ${timeAvailable || 'Any'}
-
-Search grounding is enabled. Ground your recommendations on actual, real-life locations in and around ${areaName}. If the location name is coordinates, focus on the general geographic region.`;
+CRITICAL ZERO-HALLUCINATION RULES:
+1. YOU ARE ABSOLUTELY FORBIDDEN FROM MAKING UP OR INVENTING ANY PLACE OR BUSINESS. Every single recommendation must be a real, physical, presently open and active business or landmark located in "${areaName}".
+2. NO PLACEHOLDER ADDRESSES: Every place must have its actual, authentic real-world address (like '855 Valencia St, San Francisco, CA 94110'). Never invent street numbers or street names (e.g., do NOT generate '123 Tranquility Path' or '100 Sunset Blvd' unless that exact business actually exists at that precise address in "${areaName}").
+3. GOOGLE SEARCH RETRIEVAL EXCLUSIVITY: Ground your output strictly on the real Google search results returned by the search tool. If the search grounding tool doesn't yield results for a specific preference combo, fall back to well-known real landmarks and famous active businesses in "${areaName}" that definitely exist in Google's database.
+4. MAPS ALIGNMENT: Ensure that "mapQuery" corresponds exactly to a query that will resolve unambiguously on a standard Google Maps frame for that specific place. Fictional names will fail to load, resulting in errors.`;
 
     const promptText = `Find at least 10 excellent recommendations for someone currently in "${areaName}" whose mood is "${mood}".
 Preferences:

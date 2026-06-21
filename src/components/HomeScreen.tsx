@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MapPin, Sparkles, Navigation, Compass, Info, RefreshCw } from "lucide-react";
 import { PRESET_CITIRES } from "../constants";
+import { Recommendation } from "../types";
 
 interface HomeScreenProps {
   latitude: number | null;
@@ -14,6 +15,9 @@ interface HomeScreenProps {
   setCustomLocation: (val: string) => void;
   onSelectPreset: (name: string, lat: number, lng: number) => void;
   hasRecommendations: boolean;
+  recommendations?: Recommendation[];
+  isAutoSearching?: boolean;
+  onSelectRecommendation?: (rec: Recommendation) => void;
 }
 
 export default function HomeScreen({
@@ -27,7 +31,10 @@ export default function HomeScreen({
   customLocation,
   setCustomLocation,
   onSelectPreset,
-  hasRecommendations
+  hasRecommendations,
+  recommendations = [],
+  isAutoSearching = false,
+  onSelectRecommendation
 }: HomeScreenProps) {
   const [showPresets, setShowPresets] = useState(false);
 
@@ -39,11 +46,10 @@ export default function HomeScreen({
           <div className="bg-natural-green text-white p-2 rounded-xl shadow-sm rotate-2">
             <Compass className="w-5 h-5 animate-spin-slow" />
           </div>
-          <span className="font-sans font-bold text-[10px] tracking-wider text-natural-green uppercase">Space-Aware AI</span>
         </div>
         
         <h1 className="font-serif font-black text-3xl tracking-tight text-natural-dark leading-none">
-          MoodMap AI
+          MoodMap
         </h1>
         <p className="text-natural-text text-xs mt-2 font-medium leading-relaxed">
           Find the perfect nearby cafe, trail, bookstore, or scenic spot matching exactly how you feel.
@@ -184,18 +190,68 @@ export default function HomeScreen({
         </div>
       </div>
 
-      {/* Decorative Natural Earth Theme Stat Card */}
-      <div className="bg-[#eff2e8]/60 rounded-2xl p-4 border border-[#e5e1d8] mb-4 flex items-center gap-3">
-        <div className="bg-natural-green text-white p-2.5 rounded-xl">
-          <Sparkles className="w-5 h-5" />
+      {/* Dynamic Geolocation Discovery Section */}
+      {isAutoSearching ? (
+        <div className="bg-white rounded-2xl p-4 border border-natural-border mb-4 animate-pulse">
+          <div className="flex items-center gap-2 mb-2">
+            <RefreshCw className="w-4 h-4 text-natural-green animate-spin" />
+            <span className="text-[10px] font-bold font-mono tracking-wider text-natural-green uppercase">Auto-scanning {resolvedArea.split(",")[0]}...</span>
+          </div>
+          <p className="text-xs text-natural-muted font-medium">Querying coordinates for matches near you right now.</p>
         </div>
-        <div>
-          <p className="font-serif font-bold text-natural-dark text-sm leading-snug">Calm local alignment</p>
-          <p className="text-[11px] text-natural-text leading-relaxed font-medium">
-            State your headspace, filter your environmental options, and let neural-grounding recommend matching local sanctuaries.
-          </p>
+      ) : recommendations && recommendations.length > 0 ? (
+        <div className="mb-4 text-left">
+          <div className="flex justify-between items-center mb-2 px-1">
+            <span className="text-[11px] font-bold text-natural-dark font-sans uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-3 text-natural-green animate-pulse" />
+              <span>Sanctuaries in {resolvedArea.split(",")[0]}</span>
+            </span>
+            <span className="text-[9px] text-natural-green bg-natural-softgreen px-2 py-0.5 rounded-full font-mono font-bold leading-none uppercase">
+              Auto-found
+            </span>
+          </div>
+          
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x mask-fade-right">
+            {recommendations.slice(0, 4).map((rec) => (
+              <div
+                key={rec.id}
+                onClick={() => onSelectRecommendation && onSelectRecommendation(rec)}
+                className="bg-white border-2 border-natural-border/80 rounded-2xl p-3.5 min-w-[190px] max-w-[190px] shrink-0 hover:border-natural-green transition-all shadow-3xs cursor-pointer snap-start flex flex-col justify-between"
+              >
+                <div>
+                  <span className="bg-[#eff2e8] text-natural-dark text-[8px] uppercase tracking-wider font-extrabold px-1.5 py-0.5 rounded">
+                    {rec.category}
+                  </span>
+                  <h3 className="font-serif font-black text-xs text-natural-dark mt-2 line-clamp-1">
+                    {rec.name}
+                  </h3>
+                  <p className="text-[9px] text-[#5a5a40] italic line-clamp-1 mt-1 font-serif">
+                    "{rec.explanation}"
+                  </p>
+                </div>
+                
+                <div className="flex items-center justify-between border-t border-natural-border pt-2 mt-2.5 text-[8px] font-bold font-mono uppercase text-natural-muted">
+                  <span>{rec.distance}</span>
+                  <span className="text-natural-green hover:underline">Vibe Map →</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        /* Decorative Natural Earth Theme Stat Card */
+        <div className="bg-[#eff2e8]/60 rounded-2xl p-4 border border-[#e5e1d8] mb-4 flex items-center gap-3 text-left">
+          <div className="bg-natural-green text-white p-2.5 rounded-xl">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="font-serif font-bold text-natural-dark text-sm leading-snug">Calm local alignment</p>
+            <p className="text-[11px] text-natural-text leading-relaxed font-medium">
+              State your headspace, filter your environmental options, and let neural-grounding recommend matching local sanctuaries.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Resume matches list link if any exist */}
       {hasRecommendations && (

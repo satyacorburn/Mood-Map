@@ -12,7 +12,7 @@ export interface Recommendation {
   longitude: number;
 }
 
-export type MoodType = "relaxed" | "productive" | "social" | "adventurous" | "hungry" | "bored";
+export type MoodType = "relaxed" | "productive" | "social" | "adventurous" | "hungry" | "bored" | "stressed" | "artistic" | (string & {});
 
 export interface SearchPreferences {
   mood: MoodType;

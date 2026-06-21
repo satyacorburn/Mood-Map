@@ -89,6 +89,7 @@ interface ResultsScreenProps {
   onToggleFavorite: (rec: Recommendation) => void;
   favorites: Recommendation[];
   onRetry: () => void;
+  initialSelectedRec?: Recommendation | null;
 }
 
 const LOADING_STATUS_MESSAGES = [
@@ -109,10 +110,17 @@ export default function ResultsScreen({
   onBack,
   onToggleFavorite,
   favorites,
-  onRetry
+  onRetry,
+  initialSelectedRec
 }: ResultsScreenProps) {
   const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
-  const [selectedRecForMap, setSelectedRecForMap] = useState<Recommendation | null>(null);
+  const [selectedRecForMap, setSelectedRecForMap] = useState<Recommendation | null>(initialSelectedRec || null);
+
+  useEffect(() => {
+    if (initialSelectedRec) {
+      setSelectedRecForMap(initialSelectedRec);
+    }
+  }, [initialSelectedRec]);
 
   useEffect(() => {
     if (!isLoading) return;
@@ -248,7 +256,7 @@ export default function ResultsScreen({
             <p className="text-[10px] uppercase tracking-wider font-bold text-natural-green/70 mb-2 font-mono">Live Sanctuary Map</p>
             <div className="bg-white p-2 rounded-2xl border border-natural-border shadow-2xs">
               <iframe 
-                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedRecForMap.name + ', ' + selectedRecForMap.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`} 
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedRecForMap.mapQuery || `${selectedRecForMap.name}, ${selectedRecForMap.address}`)}&t=&z=15&ie=UTF8&iwloc=&output=embed`} 
                 className="w-full h-52 rounded-xl border border-natural-border"
                 allowFullScreen={false} 
                 loading="lazy"

@@ -17,6 +17,10 @@ export default function MoodSelectScreen({
   const [prefs, setPrefs] = useState<SearchPreferences>(initialPrefs);
   const [selectedMood, setSelectedMood] = useState<MoodType | null>(initialPrefs.mood || null);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [customMoodText, setCustomMoodText] = useState(() => {
+    const isPreset = MOODS.some(m => m.id === initialPrefs.mood);
+    return isPreset ? "" : (initialPrefs.mood || "");
+  });
 
   const budgetOptions = ["Any", "Free", "$", "$$", "$$$"];
   const distanceOptions = [
@@ -31,6 +35,18 @@ export default function MoodSelectScreen({
   const handleMoodSelect = (moodId: MoodType) => {
     setSelectedMood(moodId);
     setPrefs((prev) => ({ ...prev, mood: moodId }));
+    setCustomMoodText("");
+  };
+
+  const handleCustomMoodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setCustomMoodText(val);
+    if (val.trim() !== "") {
+      setSelectedMood(val as MoodType);
+      setPrefs((prev) => ({ ...prev, mood: val as MoodType }));
+    } else {
+      setSelectedMood(null);
+    }
   };
 
   const executeSearch = () => {
@@ -57,11 +73,45 @@ export default function MoodSelectScreen({
           How are you feeling today?
         </h2>
         <p className="text-xs text-natural-muted mt-1 font-medium leading-relaxed">
-          Select an emotional baseline to filter nearby matching sanctuaries.
+          Type your exact vibe, or choose one of our verified emotional baseline presets below.
         </p>
 
+        {/* Custom Mood Input Section at the top */}
+        <div className="bg-white rounded-2xl p-4 border border-[#e5e7eb] shadow-xs my-4 flex flex-col gap-2 relative overflow-hidden">
+          <div className="absolute right-0 top-0 w-16 h-16 bg-natural-softgreen/30 rounded-full blur-xl z-0"></div>
+          <div className="relative z-10 w-full">
+            <label className="text-[10px] uppercase font-semibold tracking-wider text-natural-green block mb-1.5 flex items-center gap-1.5 font-sans">
+              <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Type Your Mood / Vibe
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. nostalgic, energetic, anxious, curious, romantic..."
+              value={customMoodText}
+              onChange={handleCustomMoodChange}
+              className="w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-natural-bg border border-natural-border text-natural-dark placeholder-natural-muted focus:outline-none focus:ring-1 focus:ring-natural-green focus:border-natural-green transition-all"
+            />
+            {customMoodText.trim() ? (
+              <div className="mt-2 text-[10px] text-natural-green font-bold flex items-center gap-1">
+                <span>✓ Active custom mood:</span>
+                <span className="bg-natural-softgreen px-2 py-0.5 rounded-lg border border-natural-green/20">"{selectedMood}"</span>
+              </div>
+            ) : (
+              <p className="text-[9px] text-[#8e8d8a] leading-tight mt-1.5">
+                Type anything to bypass the cards and generate a bespoke, tailormade list of local spots.
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Or Pick a Preset Header */}
+        <div className="flex items-center gap-2 mb-3">
+          <div className="h-[1px] bg-natural-border flex-grow"></div>
+          <span className="text-[10px] uppercase font-bold tracking-widest text-natural-muted font-sans whitespace-nowrap">Or Pick a Preset</span>
+          <div className="h-[1px] bg-natural-border flex-grow"></div>
+        </div>
+
         {/* Mood Grid */}
-        <div className="grid grid-cols-2 gap-3.5 my-4">
+        <div className="grid grid-cols-2 gap-3.5 mb-4">
           {MOODS.map((m) => {
             const isSelected = selectedMood === m.id;
             return (

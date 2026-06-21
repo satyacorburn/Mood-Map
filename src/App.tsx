@@ -27,9 +27,12 @@ export default function App() {
 
   // Search execution states
   const [isLoading, setIsLoading] = useState(false);
+  const [isAutoSearching, setIsAutoSearching] = useState(false);
+  const [hasAutoSearched, setHasAutoSearched] = useState(false);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [currentMood, setCurrentMood] = useState<MoodType>("relaxed");
+  const [initialSelectedRec, setInitialSelectedRec] = useState<Recommendation | null>(null);
 
   const [searchPrefs, setSearchPrefs] = useState<SearchPreferences>({
     mood: "relaxed",
@@ -50,10 +53,40 @@ export default function App() {
     requestBrowserLocation(true); // silent initial check
   }, []);
 
+  // Trigger automatic nearby search when a location is first resolved
+  useEffect(() => {
+    if (!hasAutoSearched && (latitude || customLocation || resolvedArea) && resolvedArea !== "San Francisco, CA") {
+      setHasAutoSearched(true);
+      executeAutoSearch(resolvedArea, latitude, longitude);
+    }
+  }, [latitude, longitude, resolvedArea, customLocation, hasAutoSearched]);
+
+  const fetchIPLocation = async () => {
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.city && data.latitude && data.longitude) {
+          const area = `${data.city}, ${data.region_code || data.region || ""}`;
+          setLatitude(data.latitude);
+          setLongitude(data.longitude);
+          setResolvedArea(area);
+          setLocationState("granted");
+          setErrorMessage(null);
+          return true;
+        }
+      }
+    } catch (err) {
+      console.warn("IP geolocation fallback failed:", err);
+    }
+    return false;
+  };
+
   const requestBrowserLocation = (silent = false) => {
     if (!navigator.geolocation) {
-      if (!silent) setErrorMessage("Geolocation API is not supported by this browser.");
+      if (!silent) setErrorMessage("Geolocation API is not supported by this browser. Attempting network location fallback...");
       setLocationState("denied");
+      fetchIPLocation();
       return;
     }
 
@@ -76,15 +109,66 @@ export default function App() {
           getApproxCity(lat, lng);
         }
       },
-      (err) => {
+      async (err) => {
         console.warn("Geolocation request failed / blocked by frame sandbox:", err.message);
-        if (!silent) {
-          setErrorMessage("Location permission was denied or couldn't be resolved in the sandboxed preview frame.");
+        // Fallback to IP-based location automatically in case of GPS blocks
+        const success = await fetchIPLocation();
+        if (!success) {
+          if (!silent) {
+            setErrorMessage("Location permission was denied. Defaulting to standard manual location.");
+          }
+          setLocationState("denied");
         }
-        setLocationState("denied");
       },
-      { timeout: 7000 }
+      { timeout: 5000 }
     );
+  };
+
+  const executeAutoSearch = async (area: string, lat: number | null, lng: number | null) => {
+    setIsAutoSearching(true);
+    try {
+      const now = new Date();
+      const userLocalTime = now.toLocaleString("en-US", {
+        weekday: "long",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true
+      });
+      const userLocalHour = now.getHours();
+
+      const response = await fetch("/api/recommend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lat: lat,
+          lng: lng,
+          mood: "relaxed", // default mood for automatic discovery
+          budget: "Any",
+          maxDistance: 10,
+          locationPref: "Any",
+          timeAvailable: "Any",
+          customLocation: area,
+          userLocalTime,
+          userLocalHour
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        const mapped = (data.recommendations || []).map((item: any, idx: number) => ({
+          ...item,
+          id: item.id || `rec-${item.name.replace(/\s+/g, "-").toLowerCase()}`
+        }));
+        setRecommendations(mapped);
+        if (data.resolvedArea) {
+          setResolvedArea(data.resolvedArea);
+        }
+      }
+    } catch (err) {
+      console.error("BG Auto-search failed:", err);
+    } finally {
+      setIsAutoSearching(false);
+    }
   };
 
   const getApproxCity = async (lat: number, lng: number) => {
@@ -205,7 +289,12 @@ export default function App() {
           errorMessage={errorMessage}
           resolvedArea={customLocation ? customLocation : resolvedArea}
           onRequestLocation={() => requestBrowserLocation(false)}
-          onSelectScreen={setActiveScreen}
+          onSelectScreen={(screen) => {
+            if (screen === "mood-select" || screen === "results") {
+              setInitialSelectedRec(null);
+            }
+            setActiveScreen(screen);
+          }}
           customLocation={customLocation}
           setCustomLocation={(val) => {
             setCustomLocation(val);
@@ -213,15 +302,32 @@ export default function App() {
               setResolvedArea(val);
             }
           }}
-          onSelectPreset={handleSelectPreset}
+          onSelectPreset={(name, lat, lng) => {
+            handleSelectPreset(name, lat, lng);
+            // Re-trigger auto-search for newly selected preset
+            setHasAutoSearched(true);
+            executeAutoSearch(name, lat, lng);
+          }}
           hasRecommendations={recommendations.length > 0}
+          recommendations={recommendations}
+          isAutoSearching={isAutoSearching}
+          onSelectRecommendation={(rec) => {
+            setInitialSelectedRec(rec);
+            setActiveScreen("results");
+          }}
         />
       )}
 
       {activeScreen === "mood-select" && (
         <MoodSelectScreen
-          onBack={() => setActiveScreen("home")}
-          onSearch={executeAIRecommendation}
+          onBack={() => {
+            setInitialSelectedRec(null);
+            setActiveScreen("home");
+          }}
+          onSearch={(prefs) => {
+            setInitialSelectedRec(null);
+            executeAIRecommendation(prefs);
+          }}
           initialPrefs={{
             ...searchPrefs,
             customLocation: customLocation
@@ -236,10 +342,14 @@ export default function App() {
           error={error}
           selectedMood={currentMood}
           resolvedArea={resolvedArea}
-          onBack={() => setActiveScreen("mood-select")}
+          onBack={() => {
+            setInitialSelectedRec(null);
+            setActiveScreen("mood-select");
+          }}
           onToggleFavorite={handleToggleFavorite}
           favorites={favorites}
           onRetry={() => executeAIRecommendation(searchPrefs)}
+          initialSelectedRec={initialSelectedRec}
         />
       )}
 
