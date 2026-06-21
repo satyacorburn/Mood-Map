@@ -13,6 +13,72 @@ import {
 import { Recommendation, MoodType } from "../types";
 import { MOODS } from "../constants";
 
+const isStoreOrRestaurant = (category: string, name: string) => {
+  const cat = category.toLowerCase();
+  const n = name.toLowerCase();
+  return (
+    cat.includes("store") ||
+    cat.includes("shop") ||
+    cat.includes("market") ||
+    cat.includes("boutique") ||
+    cat.includes("bookstore") ||
+    cat.includes("pharmacy") ||
+    cat.includes("roastery") ||
+    cat.includes("bakery") ||
+    cat.includes("cafe") ||
+    cat.includes("restaurant") ||
+    cat.includes("bistro") ||
+    cat.includes("eatery") ||
+    cat.includes("kitchen") ||
+    cat.includes("dining") ||
+    cat.includes("bbq") ||
+    cat.includes("seafood") ||
+    cat.includes("dim sum") ||
+    cat.includes("palace") ||
+    cat.includes("smokehouse") ||
+    cat.includes("diner") ||
+    cat.includes("grill") ||
+    cat.includes("noodle") ||
+    cat.includes("tacos") ||
+    cat.includes("pizza") ||
+    n.includes("bookstore") ||
+    n.includes("market") ||
+    n.includes("coop") ||
+    n.includes("cooperative") ||
+    n.includes("bistro") ||
+    n.includes("kitchen") ||
+    n.includes("eatery") ||
+    n.includes("bbq") ||
+    n.includes("cafe") ||
+    n.includes("coffee")
+  );
+};
+
+const determineHours = (category: string, name: string) => {
+  const cat = category.toLowerCase();
+  const n = name.toLowerCase();
+  
+  if (cat.includes("cafe") || cat.includes("coffee") || cat.includes("roastery") || n.includes("cafe") || n.includes("coffee")) {
+    return {
+      label: "7:00 AM - 6:00 PM",
+      startHour: 7,
+      endHour: 18
+    };
+  }
+  if (cat.includes("restaurant") || cat.includes("bistro") || cat.includes("eatery") || cat.includes("kitchen") || cat.includes("dining") || cat.includes("bbq") || cat.includes("seafood") || cat.includes("dim sum") || cat.includes("palace") || cat.includes("smokehouse") || cat.includes("diner") || cat.includes("grill") || cat.includes("noodle") || cat.includes("tacos") || cat.includes("pizza") || n.includes("bistro") || n.includes("kitchen") || n.includes("eatery") || n.includes("bbq")) {
+    return {
+      label: "11:00 AM - 11:00 PM",
+      startHour: 11,
+      endHour: 23
+    };
+  }
+  return {
+    label: "9:00 AM - 8:00 PM",
+    startHour: 9,
+    endHour: 20
+  };
+};
+
 interface ResultsScreenProps {
   isLoading: boolean;
   recommendations: Recommendation[];
@@ -209,6 +275,36 @@ export default function ResultsScreen({
             </div>
           </div>
 
+          {/* Operating Hours Alert block for stores/restaurants */}
+          {isStoreOrRestaurant(selectedRecForMap.category, selectedRecForMap.name) && (() => {
+            const hoursInfo = determineHours(selectedRecForMap.category, selectedRecForMap.name);
+            const currentHour = new Date().getHours();
+            const isOpenNow = currentHour >= hoursInfo.startHour && currentHour < hoursInfo.endHour;
+
+            return (
+              <div className="bg-white rounded-2xl border border-natural-border p-4 shadow-3xs flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-natural-green/10 text-natural-green">
+                    <Clock className="w-4.5 h-4.5" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] text-natural-muted font-bold uppercase tracking-wider font-mono">Operating Hours</p>
+                    <p className="text-xs font-semibold text-natural-dark mt-0.5">Today: {hoursInfo.label}</p>
+                  </div>
+                </div>
+                {isOpenNow ? (
+                  <span className="text-[10px] text-natural-green font-bold bg-[#eff2e8] px-2.5 py-1 rounded-full border border-natural-green/20">
+                    Open Now
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-natural-rust font-bold bg-natural-rust-soft px-2.5 py-1 rounded-full border border-natural-rust/20">
+                    Closed
+                  </span>
+                )}
+              </div>
+            );
+          })()}
+
           {/* Vibe and description quote card */}
           <div className="bg-[#eff2e8]/80 rounded-2xl p-4 border border-[#e5e1d8] flex flex-col gap-1">
             <p className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] font-mono leading-none">The Vibe Match</p>
@@ -374,10 +470,6 @@ export default function ResultsScreen({
                       <span className="text-[10px] md:text-xs font-semibold text-natural-muted flex items-center gap-1 font-mono">
                         <DollarSign className="w-4 h-4 text-natural-green" />
                         {rec.priceLevel}
-                      </span>
-                      <span className="text-[10px] md:text-xs font-semibold text-natural-muted flex items-center gap-1 font-mono">
-                        <Clock className="w-4 h-4 text-natural-green" />
-                        {rec.timeRequired}
                       </span>
                     </div>
 
