@@ -46,6 +46,7 @@ export default function ResultsScreen({
   onRetry
 }: ResultsScreenProps) {
   const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+  const [selectedRecForMap, setSelectedRecForMap] = useState<Recommendation | null>(null);
 
   useEffect(() => {
     if (!isLoading) return;
@@ -131,8 +132,145 @@ export default function ResultsScreen({
     );
   }
 
+  if (selectedRecForMap) {
+    const isFav = isFavorited(selectedRecForMap);
+    return (
+      <div className="flex flex-col flex-grow animate-fade-in bg-natural-bg h-full relative">
+        {/* Top sticky bar of Detail view */}
+        <div className="bg-white border-b border-natural-border p-5 sticky top-0 z-30 shadow-2xs">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setSelectedRecForMap(null)}
+              className="flex items-center gap-1 text-xs text-natural-green hover:text-natural-dark font-black transition-all bg-[#eff2e8] px-3 py-1.5 rounded-full border border-natural-green/20 cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Matches</span>
+            </button>
+
+            <button
+              onClick={() => onToggleFavorite(selectedRecForMap)}
+              className={`p-2 rounded-full transition-all border cursor-pointer ${
+                isFav 
+                  ? "bg-natural-rust-soft border-[#f5d0c0] text-natural-rust scale-105" 
+                  : "bg-[#fcfbf9] border-natural-border text-natural-muted hover:text-natural-text"
+              }`}
+              title={isFav ? "Saved to Favorites" : "Bookmark this spot"}
+            >
+              <Heart className={`w-4 h-4 ${isFav ? "fill-current" : ""}`} />
+            </button>
+          </div>
+        </div>
+
+        {/* Scrollable details view */}
+        <div className="flex-1 p-5 overflow-y-auto space-y-5 pb-12">
+          {/* Tag & Title */}
+          <div>
+            <span className="bg-natural-rust-soft text-[#d27d56] text-[10px] uppercase tracking-wider font-extrabold py-0.5 px-2 rounded-md font-sans">
+              {selectedRecForMap.category}
+            </span>
+            <h2 className="font-serif font-black text-2xl text-natural-dark tracking-tight leading-snug mt-2">
+              {selectedRecForMap.name}
+            </h2>
+            <p className="text-xs text-natural-muted mt-1.5 font-semibold flex items-start gap-1 leading-relaxed break-words">
+              <MapPin className="w-3.5 h-3.5 text-natural-green shrink-0 mt-0.5" />
+              <span>{selectedRecForMap.address}</span>
+            </p>
+          </div>
+
+          {/* Real Live Map Embed */}
+          <div className="relative">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-natural-green/70 mb-2 font-mono">Live Sanctuary Map</p>
+            <div className="bg-white p-2 rounded-2xl border border-natural-border shadow-2xs">
+              <iframe 
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedRecForMap.name + ', ' + selectedRecForMap.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed`} 
+                className="w-full h-52 rounded-xl border border-natural-border"
+                allowFullScreen={false} 
+                loading="lazy"
+                title={`Map of ${selectedRecForMap.name}`}
+              ></iframe>
+            </div>
+          </div>
+
+          {/* Facts bar */}
+          <div className="bg-white rounded-2xl border border-natural-border p-4 shadow-3xs flex items-center justify-around text-center">
+            <div>
+              <p className="text-[10px] text-natural-muted font-bold uppercase tracking-wider font-mono">Distance</p>
+              <p className="text-sm font-serif font-bold text-natural-dark mt-0.5">{selectedRecForMap.distance}</p>
+            </div>
+            <div className="h-8 w-[1px] bg-natural-border"></div>
+            <div>
+              <p className="text-[10px] text-natural-muted font-bold uppercase tracking-wider font-mono">Price Tier</p>
+              <p className="text-sm font-serif font-bold text-natural-dark mt-0.5">{selectedRecForMap.priceLevel}</p>
+            </div>
+            <div className="h-8 w-[1px] bg-natural-border"></div>
+            <div>
+              <p className="text-[10px] text-natural-muted font-bold uppercase tracking-wider font-mono">Time Needed</p>
+              <p className="text-sm font-serif font-bold text-natural-dark mt-0.5">{selectedRecForMap.timeRequired}</p>
+            </div>
+          </div>
+
+          {/* Vibe and description quote card */}
+          <div className="bg-[#eff2e8]/80 rounded-2xl p-4 border border-[#e5e1d8] flex flex-col gap-1">
+            <p className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] font-mono leading-none">The Vibe Match</p>
+            <p className="text-xs text-natural-dark font-serif italic leading-relaxed mt-1.5 text-[#5a5a40]">
+              &ldquo;{selectedRecForMap.explanation}&rdquo;
+            </p>
+          </div>
+
+          {/* Navigation Paths / Alignment Steps */}
+          <div className="space-y-3.5">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-natural-green/70 font-mono">Aesthetic Aligning Directions</p>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <span className="w-5 h-5 rounded-full bg-natural-green text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5 font-mono">1</span>
+                <div>
+                  <h4 className="text-xs font-bold text-natural-dark font-sans leading-tight">Position Aligning</h4>
+                  <p className="text-[11px] text-natural-text mt-0.5 leading-snug">
+                    Initiate transit from your location towards {selectedRecForMap.address}. Ensure dynamic breath loops to set a neutral, relaxed baseline.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="w-5 h-5 rounded-full bg-natural-green text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5 font-mono">2</span>
+                <div>
+                  <h4 className="text-xs font-bold text-natural-dark font-sans leading-tight">Mindful Sight Syncing</h4>
+                  <p className="text-[11px] text-natural-text mt-0.5 leading-snug">
+                    Opt for quiet neighborhood pathways or scenic roads during this {selectedRecForMap.distance} stretch, letting your sensory focus drift with the setting elements.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="w-5 h-5 rounded-full bg-natural-green text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5 font-mono">3</span>
+                <div>
+                  <h4 className="text-xs font-bold text-natural-dark font-sans leading-tight">Sanctuary Entrance</h4>
+                  <p className="text-[11px] text-natural-text mt-0.5 leading-snug">
+                    Arrive at {selectedRecForMap.name}. Spend approximately {selectedRecForMap.timeRequired} syncing your active mindset with this physical space to maximize cognitive alignment.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Open Real Maps Button CTA */}
+          <div className="pt-2">
+            <button
+              onClick={() => handleOpenDirections(selectedRecForMap)}
+              className="w-full bg-natural-green hover:bg-natural-dark text-white font-serif font-black py-3.5 px-6 rounded-2xl shadow-sm transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer group"
+            >
+              <span>Launch GPS Navigation App</span>
+              <Navigation className="w-4 h-4 text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
+            <p className="text-center text-[9px] text-natural-muted mt-2 font-mono uppercase tracking-widest leading-none">
+              opens google maps instructions in secondary tab
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col flex-grow pb-6 animate-fade-in bg-natural-bg h-full">
+    <div className="flex flex-col flex-grow pb-12 animate-fade-in bg-natural-bg">
       {/* Sticky header bar */}
       <div className="bg-white border-b border-natural-border p-5 sticky top-0 z-30 shadow-2xs">
         <div className="flex items-center justify-between">
@@ -159,17 +297,17 @@ export default function ResultsScreen({
                 {moodConfig.label} Matches
               </h2>
             </div>
-            <p className="text-[11px] text-natural-muted font-serif italic mt-1 font-medium truncate max-w-[280px]">
+            <p className="text-[11px] text-natural-muted font-serif italic mt-1 font-medium leading-relaxed break-all">
               in & around {resolvedArea}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Recs container */}
-      <div className="flex-grow px-5 pt-4 flex flex-col gap-4 overflow-y-auto max-h-[620px] pb-10">
+      {/* Recs container - Natural Flow, Spaced & Larger matches area */}
+      <div className="px-5 pt-5 flex flex-col gap-5 pb-16">
         {recommendations.length === 0 ? (
-          <div className="flex flex-col items-center text-center justify-center py-12 bg-white rounded-3xl border border-natural-border p-6">
+          <div className="flex flex-col items-center text-center justify-center py-12 bg-white rounded-3xl border border-natural-border p-6 font-sans">
             <p className="text-sm font-semibold text-natural-dark">No matching spots found in area</p>
             <p className="text-xs text-natural-muted mt-1">Try relaxing filters or broadening your range parameters.</p>
             <button onClick={onBack} className="text-xs text-natural-green font-bold mt-3 hover:underline">
@@ -182,69 +320,76 @@ export default function ResultsScreen({
             return (
               <div 
                 key={rec.id || `rec-${index}`}
-                className="bg-white rounded-[28px] border border-natural-border hover:shadow-md transition-shadow flex flex-col relative overflow-hidden"
+                onClick={() => setSelectedRecForMap(rec)}
+                className="bg-white rounded-[32px] border-2 border-natural-border/80 hover:shadow-lg hover:border-natural-green/60 transition-all flex flex-col relative overflow-hidden cursor-pointer group"
               >
-                <div className="p-5 flex-1 flex flex-col justify-between">
+                <div className="p-6 md:p-7 flex-1 flex flex-col justify-between">
                   <div>
                     {/* Category tag & Favorite Heart trigger */}
-                    <div className="flex justify-between items-center gap-2 mb-2.5">
-                      <span className="bg-natural-rust-soft text-[#d27d56] text-[9px] uppercase tracking-tighter font-extrabold py-0.5 px-2 rounded font-sans">
+                    <div className="flex justify-between items-center gap-2 mb-3.5">
+                      <span className="bg-natural-rust-soft text-[#d27d56] text-[10px] uppercase tracking-wider font-extrabold py-0.5 px-2.5 rounded font-sans">
                         {rec.category}
                       </span>
                       
                       <button
-                        onClick={() => onToggleFavorite(rec)}
-                        className={`p-1.5 rounded-full transition-all border ${
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleFavorite(rec);
+                        }}
+                        className={`p-2 rounded-full transition-all border cursor-pointer ${
                           isFav 
-                            ? "bg-natural-rust-soft border-[#f5d0c0] text-natural-rust" 
+                            ? "bg-natural-rust-soft border-[#f5d0c0] text-natural-rust scale-105" 
                             : "bg-[#fcfbf9] border-natural-border text-natural-muted hover:text-natural-text"
                         }`}
                         title={isFav ? "Saved to Favorites" : "Bookmark this spot"}
                       >
-                        <Heart className={`w-3.5 h-3.5 ${isFav ? "fill-current" : ""}`} />
+                        <Heart className={`w-4 h-4 ${isFav ? "fill-current" : ""}`} />
                       </button>
                     </div>
 
                     {/* Place Name and Address */}
-                    <h3 className="font-serif font-bold text-base text-natural-dark tracking-tight leading-snug">
+                    <h3 className="font-serif font-black text-lg md:text-xl text-natural-dark tracking-tight leading-snug">
                       {rec.name}
                     </h3>
-                    <p className="text-[10px] text-natural-muted mt-0.5 font-medium flex items-center gap-0.5">
-                      <MapPin className="w-2.5 h-2.5 text-natural-muted" />
-                      {rec.address}
+                    <p className="text-xs text-natural-muted mt-2 font-semibold flex items-start gap-1 leading-relaxed break-words">
+                      <MapPin className="w-3.5 h-3.5 text-natural-green shrink-0 mt-0.5" />
+                      <span>{rec.address}</span>
                     </p>
 
                     {/* Mini Vibe explanation generated by Gemini AI matching design */}
-                    <div className="my-3 bg-natural-bg border-l-2 border-natural-green p-3">
-                      <p className="text-[11px] italic leading-relaxed text-[#5a5a40]">
+                    <div className="my-4 bg-[#fbfbf9] border-l-2 border-natural-green/70 p-3.5 rounded-r-xl">
+                      <p className="text-xs italic leading-relaxed text-[#5a5a40]">
                         &ldquo;{rec.explanation}&rdquo;
                       </p>
                     </div>
                   </div>
 
                   {/* Fact line: Distance, Price, Time stats */}
-                  <div className="flex items-center justify-between border-t border-natural-border/60 pt-3 mt-1 justify-self-end">
-                    <div className="flex items-center gap-3">
-                      <span className="text-[10px] font-semibold text-natural-muted flex items-center gap-0.5 font-mono">
-                        <Compass className="w-3.5 h-3.5 text-natural-green" />
+                  <div className="flex items-center justify-between border-t border-natural-border/60 pt-4 mt-2 justify-self-end">
+                    <div className="flex items-center gap-3 md:gap-4">
+                      <span className="text-[10px] md:text-xs font-semibold text-natural-muted flex items-center gap-1 font-mono">
+                        <Compass className="w-4 h-4 text-natural-green" />
                         {rec.distance}
                       </span>
-                      <span className="text-[10px] font-semibold text-natural-muted flex items-center gap-0.5 font-mono">
-                        <DollarSign className="w-3.5 h-3.5 text-natural-green" />
+                      <span className="text-[10px] md:text-xs font-semibold text-natural-muted flex items-center gap-1 font-mono">
+                        <DollarSign className="w-4 h-4 text-natural-green" />
                         {rec.priceLevel}
                       </span>
-                      <span className="text-[10px] font-semibold text-natural-muted flex items-center gap-0.5 font-mono">
-                        <Clock className="w-3.5 h-3.5 text-natural-green" />
+                      <span className="text-[10px] md:text-xs font-semibold text-natural-muted flex items-center gap-1 font-mono">
+                        <Clock className="w-4 h-4 text-natural-green" />
                         {rec.timeRequired}
                       </span>
                     </div>
 
                     {/* Open Directions action button matching Design HTML outline */}
                     <button
-                      onClick={() => handleOpenDirections(rec)}
-                      className="bg-natural-green hover:bg-natural-dark text-white font-bold text-[10px] uppercase py-1.5 px-3 rounded-full flex items-center gap-1 transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRecForMap(rec);
+                      }}
+                      className="bg-natural-green hover:bg-natural-dark text-white font-bold text-[10px] md:text-xs uppercase py-2 px-4 rounded-full flex items-center gap-1.5 transition-all cursor-pointer shadow-1xs"
                     >
-                      <Navigation className="w-3 h-3 text-white" />
+                      <Navigation className="w-3.5 h-3.5 text-white" />
                       <span>Directions</span>
                     </button>
                   </div>

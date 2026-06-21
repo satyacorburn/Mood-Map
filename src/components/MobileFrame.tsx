@@ -16,9 +16,9 @@ export default function MobileFrame({
   favoritesCount
 }: MobileFrameProps) {
   return (
-    <div className="min-h-screen bg-natural-dark flex items-center justify-center py-0 sm:py-8 font-sans px-0 sm:px-4">
+    <div className="h-screen sm:h-auto sm:min-h-screen bg-natural-dark flex items-center justify-center py-0 sm:py-8 font-sans px-0 sm:px-4 overflow-hidden">
       {/* Phone Mockup Frame wrapper for desktop, standard screen for mobile */}
-      <div className="w-full sm:max-w-[430px] sm:h-[880px] bg-natural-bg sm:rounded-[50px] shadow-2xl relative overflow-hidden flex flex-col border-[6px] border-slate-900">
+      <div className="w-full h-full sm:h-[880px] sm:max-w-[430px] bg-natural-bg sm:rounded-[50px] shadow-2xl relative overflow-hidden flex flex-col border-[6px] border-slate-900">
         
         {/* Dynamic Status Notch / Speaker bar for style */}
         <div className="hidden sm:flex absolute top-0 left-1/2 -translate-x-1/2 w-36 h-6 bg-slate-900 rounded-b-xl z-50 items-center justify-center">

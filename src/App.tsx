@@ -132,6 +132,15 @@ export default function App() {
       // Use customLocation typed input if provided, else use lat/lng coordinates
       const finalCustomLoc = customLocation.trim() || prefs.customLocation;
       
+      const now = new Date();
+      const userLocalTime = now.toLocaleString("en-US", {
+        weekday: "long",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true
+      });
+      const userLocalHour = now.getHours();
+      
       const response = await fetch("/api/recommend", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -143,7 +152,9 @@ export default function App() {
           maxDistance: prefs.maxDistance,
           locationPref: prefs.locationPref,
           timeAvailable: prefs.timeAvailable,
-          customLocation: finalCustomLoc
+          customLocation: finalCustomLoc,
+          userLocalTime,
+          userLocalHour
         })
       });
 
@@ -203,6 +214,7 @@ export default function App() {
             }
           }}
           onSelectPreset={handleSelectPreset}
+          hasRecommendations={recommendations.length > 0}
         />
       )}
 

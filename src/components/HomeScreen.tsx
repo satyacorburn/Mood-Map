@@ -9,10 +9,11 @@ interface HomeScreenProps {
   errorMessage: string | null;
   resolvedArea: string;
   onRequestLocation: () => void;
-  onSelectScreen: (screen: "mood-select" | "favorites") => void;
+  onSelectScreen: (screen: any) => void;
   customLocation: string;
   setCustomLocation: (val: string) => void;
   onSelectPreset: (name: string, lat: number, lng: number) => void;
+  hasRecommendations: boolean;
 }
 
 export default function HomeScreen({
@@ -25,7 +26,8 @@ export default function HomeScreen({
   onSelectScreen,
   customLocation,
   setCustomLocation,
-  onSelectPreset
+  onSelectPreset,
+  hasRecommendations
 }: HomeScreenProps) {
   const [showPresets, setShowPresets] = useState(false);
 
@@ -148,7 +150,7 @@ export default function HomeScreen({
                 placeholder="Enter city or neighborhood (e.g. Austin, TX)"
                 value={customLocation}
                 onChange={(e) => setCustomLocation(e.target.value)}
-                className="flex-1 bg-natural-bg border border-natural-border rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-natural-green"
+                className="flex-1 bg-natural-bg border border-natural-border rounded-xl px-3.5 py-2 text-base sm:text-xs focus:outline-none focus:ring-1 focus:ring-natural-green"
               />
               {customLocation && (
                 <button
@@ -194,6 +196,22 @@ export default function HomeScreen({
           </p>
         </div>
       </div>
+
+      {/* Resume matches list link if any exist */}
+      {hasRecommendations && (
+        <div className="mb-4">
+          <button 
+            onClick={() => onSelectScreen("results")}
+            className="w-full bg-[#eff2e8] hover:bg-natural-softgreen border border-natural-green/20 text-natural-dark font-sans font-bold text-xs py-3 px-4 rounded-xl shadow-xs transition-all flex items-center justify-between gap-2 cursor-pointer"
+          >
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-natural-green animate-pulse"></span>
+              <span>Active alignments loaded</span>
+            </div>
+            <span className="font-serif italic font-bold text-natural-green">View Matches →</span>
+          </button>
+        </div>
+      )}
 
       {/* Large CTA Bottom Action */}
       <div className="mt-auto">

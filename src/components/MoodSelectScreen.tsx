@@ -98,108 +98,102 @@ export default function MoodSelectScreen({
 
       {/* Advanced Filters Panel */}
       <div className="bg-white rounded-2xl p-4 border border-natural-border shadow-2xs my-2">
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="w-full flex items-center justify-between font-serif font-bold text-natural-dark text-xs transition-colors hover:text-natural-green"
-        >
+        <div className="w-full flex items-center justify-between font-serif font-bold text-natural-dark text-xs pb-3 border-b border-natural-border/60">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-natural-green" />
             <span>Customize Mood Mapping</span>
           </div>
-          <ChevronDown className={`w-4 h-4 text-natural-muted transition-transform duration-200 ${showAdvanced ? "rotate-180" : ""}`} />
-        </button>
+        </div>
 
-        {showAdvanced && (
-          <div className="mt-4 flex flex-col gap-3.5 border-t border-natural-border pt-4 animate-fade-in">
-            {/* Budget */}
-            <div>
-              <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
-                <DollarSign className="w-3 h-3 text-natural-green" /> Budget Range
-              </label>
-              <div className="flex gap-1.5 flex-wrap">
-                {budgetOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => setPrefs((prev) => ({ ...prev, budget: opt }))}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
-                      prefs.budget === opt
-                        ? "bg-natural-green border-natural-green text-white"
-                        : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Distance */}
-            <div>
-              <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
-                <Compass className="w-3 h-3 text-natural-green" /> Radius Limit
-              </label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {distanceOptions.map((opt) => (
-                  <button
-                    key={opt.val}
-                    onClick={() => setPrefs((prev) => ({ ...prev, maxDistance: opt.val }))}
-                    className={`p-2 rounded-xl text-[10px] font-bold border text-center transition-all truncate leading-tight ${
-                      prefs.maxDistance === opt.val
-                        ? "bg-natural-green border-natural-green text-white"
-                        : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Indoor or Outdoor */}
-            <div>
-              <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
-                <MapPin className="w-3 h-3 text-natural-green" /> Setting Preference
-              </label>
-              <div className="flex gap-1.5">
-                {indoorOutdoorOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => setPrefs((prev) => ({ ...prev, locationPref: opt }))}
-                    className={`flex-1 py-1.5 rounded-xl text-xs font-semibold border text-center transition-all ${
-                      prefs.locationPref === opt
-                        ? "bg-natural-green border-natural-green text-white"
-                        : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Time Required */}
-            <div>
-              <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
-                <Clock className="w-3 h-3 text-natural-green" /> Duration Available
-              </label>
-              <div className="flex gap-1.5 flex-wrap">
-                {timeOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => setPrefs((prev) => ({ ...prev, timeAvailable: opt }))}
-                    className={`px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all ${
-                      prefs.timeAvailable === opt
-                        ? "bg-natural-green border-natural-green text-white"
-                        : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
+        <div className="mt-4 flex flex-col gap-3.5 pt-1">
+          {/* Budget */}
+          <div>
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
+              <DollarSign className="w-3 h-3 text-natural-green" /> Budget Range
+            </label>
+            <div className="flex gap-1.5 flex-wrap">
+              {budgetOptions.map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setPrefs((prev) => ({ ...prev, budget: opt }))}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                    prefs.budget === opt
+                      ? "bg-natural-green border-natural-green text-white"
+                      : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
             </div>
           </div>
-        )}
+
+          {/* Distance */}
+          <div>
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
+              <Compass className="w-3 h-3 text-natural-green" /> Radius Limit
+            </label>
+            <div className="grid grid-cols-2 gap-1.5">
+              {distanceOptions.map((opt) => (
+                <button
+                  key={opt.val}
+                  onClick={() => setPrefs((prev) => ({ ...prev, maxDistance: opt.val }))}
+                  className={`p-2 rounded-xl text-[10px] font-bold border text-center transition-all truncate leading-tight ${
+                    prefs.maxDistance === opt.val
+                      ? "bg-natural-green border-natural-green text-white"
+                      : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Indoor or Outdoor */}
+          <div>
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
+              <MapPin className="w-3 h-3 text-natural-green" /> Setting Preference
+            </label>
+            <div className="flex gap-1.5">
+              {indoorOutdoorOptions.map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setPrefs((prev) => ({ ...prev, locationPref: opt }))}
+                  className={`flex-1 py-1.5 rounded-xl text-xs font-semibold border text-center transition-all ${
+                    prefs.locationPref === opt
+                      ? "bg-natural-green border-natural-green text-white"
+                      : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Time Required */}
+          <div>
+            <label className="text-[10px] uppercase font-bold tracking-widest text-[#8a9a5b] block mb-1.5 flex items-center gap-1 font-mono">
+              <Clock className="w-3 h-3 text-natural-green" /> Duration Available
+            </label>
+            <div className="flex gap-1.5 flex-wrap">
+              {timeOptions.map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => setPrefs((prev) => ({ ...prev, timeAvailable: opt }))}
+                  className={`px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all ${
+                    prefs.timeAvailable === opt
+                      ? "bg-natural-green border-natural-green text-white"
+                      : "bg-white border-natural-border text-natural-text hover:bg-natural-bg"
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Trigger Button bar */}
