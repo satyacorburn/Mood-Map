@@ -15,6 +15,14 @@ export default function MobileFrame({
   setActiveScreen,
   favoritesCount
 }: MobileFrameProps) {
+  const viewportRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (viewportRef.current) {
+      viewportRef.current.scrollTop = 0;
+    }
+  }, [activeScreen]);
+
   return (
     <div className="h-screen sm:h-auto sm:min-h-screen bg-natural-dark flex items-center justify-center py-0 sm:py-8 font-sans px-0 sm:px-4 overflow-hidden">
       {/* Phone Mockup Frame wrapper for desktop, standard screen for mobile */}
@@ -38,7 +46,7 @@ export default function MobileFrame({
         </div>
 
         {/* Main Viewport */}
-        <div className="flex-1 overflow-y-auto bg-natural-bg flex flex-col relative">
+        <div ref={viewportRef} className="flex-1 overflow-y-auto bg-natural-bg flex flex-col relative">
           {children}
         </div>
 
